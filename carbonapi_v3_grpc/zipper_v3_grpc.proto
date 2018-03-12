@@ -1,8 +1,8 @@
 syntax = "proto3";
-package zipper_v3_grpc;
+package carbonapi_v3_grpc;
 
-// Regenerate with protoc --gogoslick_out=plugins=grpc:. zipper_v3_grpc.proto --proto_path=../vendor/ --proto_path=. --proto_path=../
-import "zipper_v3_pb/zipper_v3_pb.proto";
+// Regenerate with protoc --gogoslick_out=plugins=grpc:. carbonapi_v3_grpc.proto --proto_path=../vendor/ --proto_path=. --proto_path=../
+import "carbonapi_v3_pb/carbonapi_v3_pb.proto";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/empty.proto";
 

@@ -1,7 +1,7 @@
 syntax = "proto3";
-package carbonzipperpbng;
+package carbonapi_v3_pb;
 
-// Regenerate with protoc --gogofast_out=plugins=grpc:. zipper_v3_grpc.proto --proto_path=../vendor/ --proto_path=.
+// Regenerate with protoc --gogofast_out=plugins=grpc:. carbonapi_v3_grpc.proto --proto_path=../vendor/ --proto_path=.
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 
 message FilteringFunction {

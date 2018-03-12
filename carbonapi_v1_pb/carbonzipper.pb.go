@@ -3,7 +3,7 @@
 // DO NOT EDIT!
 
 /*
-	Package zipper_v1_pb is a generated protocol buffer package.
+	Package carbonapi_v1_pb is a generated protocol buffer package.
 
 	It is generated from these files:
 		carbonzipper.proto
@@ -18,7 +18,7 @@
 		ServerInfoResponse
 		ZipperInfoResponse
 */
-package zipper_v1_pb
+package carbonapi_v1_pb
 
 import proto "github.com/gogo/protobuf/proto"
 import fmt "fmt"
@@ -281,14 +281,14 @@ func (m *ZipperInfoResponse) GetResponses() []ServerInfoResponse {
 }
 
 func init() {
-	proto.RegisterType((*FetchResponse)(nil), "zipper_v1_pb.FetchResponse")
-	proto.RegisterType((*MultiFetchResponse)(nil), "zipper_v1_pb.MultiFetchResponse")
-	proto.RegisterType((*GlobMatch)(nil), "zipper_v1_pb.GlobMatch")
-	proto.RegisterType((*GlobResponse)(nil), "zipper_v1_pb.GlobResponse")
-	proto.RegisterType((*Retention)(nil), "zipper_v1_pb.Retention")
-	proto.RegisterType((*InfoResponse)(nil), "zipper_v1_pb.InfoResponse")
-	proto.RegisterType((*ServerInfoResponse)(nil), "zipper_v1_pb.ServerInfoResponse")
-	proto.RegisterType((*ZipperInfoResponse)(nil), "zipper_v1_pb.ZipperInfoResponse")
+	proto.RegisterType((*FetchResponse)(nil), "carbonapi_v1_pb.FetchResponse")
+	proto.RegisterType((*MultiFetchResponse)(nil), "carbonapi_v1_pb.MultiFetchResponse")
+	proto.RegisterType((*GlobMatch)(nil), "carbonapi_v1_pb.GlobMatch")
+	proto.RegisterType((*GlobResponse)(nil), "carbonapi_v1_pb.GlobResponse")
+	proto.RegisterType((*Retention)(nil), "carbonapi_v1_pb.Retention")
+	proto.RegisterType((*InfoResponse)(nil), "carbonapi_v1_pb.InfoResponse")
+	proto.RegisterType((*ServerInfoResponse)(nil), "carbonapi_v1_pb.ServerInfoResponse")
+	proto.RegisterType((*ZipperInfoResponse)(nil), "carbonapi_v1_pb.ZipperInfoResponse")
 }
 func (m *FetchResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()

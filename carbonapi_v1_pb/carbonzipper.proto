@@ -1,5 +1,5 @@
 syntax = "proto2";
-package zipper_v1_pb;
+package carbonapi_v1_pb;
 
 // Regenerate with  protoc --gogo_out=. carbonzipper.proto
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
