@@ -24,11 +24,14 @@ message MultiFetchRequest {
 // Stop time can be computed by stepTime*len(values)
 message FetchResponse {
     string name = 1;
-    uint32 startTime = 2;
-    uint32 stepTime = 3;
-    string aggregationFunction = 4;
-    repeated double values = 5;
-    repeated string AppliedFunctions = 6;
+    string pathExpression = 2;
+    string consolidationFunc = 3;
+    uint32 startTime = 4;
+    uint32 stopTime = 5;
+    uint32 stepTime = 6;
+    float xFilesFactor = 7;
+    repeated double values = 8;
+    repeated string appliedFunctions = 9;
 }
 
 message MultiFetchResponse {
@@ -45,13 +48,14 @@ message GlobMatch {
     bool isLeaf = 2;
 }
 
+// request name to metrics
 message GlobResponse {
     string name = 1;
     repeated GlobMatch matches = 2 [(gogoproto.nullable) = false];
 }
 
 message MultiGlobResponse {
-    map<string, GlobResponse> metrics = 1 [(gogoproto.nullable) = false];
+    repeated GlobResponse metrics = 1 [(gogoproto.nullable) = false];
 }
 
 // Information about metrics
@@ -70,9 +74,9 @@ message Retention {
 
 message MetricsInfoResponse {
     string name = 1;
-    string aggregationMethod = 2;
-    uint32 maxRetention = 3;
+    string consolidationFunc = 2;
     float xFilesFactor = 4;
+    uint32 maxRetention = 3;
     repeated Retention retentions = 5 [(gogoproto.nullable) = false];
 }
 
@@ -81,7 +85,7 @@ message MultiMetricsInfoResponse {
 }
 
 message ZipperInfoResponse {
-    map<string, MetricsInfoResponse> info = 1 [(gogoproto.nullable) = false];
+    map<string, MultiMetricsInfoResponse> info = 1 [(gogoproto.nullable) = false];
 }
 
 // List all metrics
