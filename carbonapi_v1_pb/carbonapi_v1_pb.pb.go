@@ -883,6 +883,9 @@ func encodeVarintCarbonapiV1Pb(dAtA []byte, offset int, v uint64) int {
 	return offset + 1
 }
 func (m *FetchResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Name != nil {
@@ -911,6 +914,9 @@ func (m *FetchResponse) Size() (n int) {
 }
 
 func (m *MultiFetchResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Metrics) > 0 {
@@ -926,6 +932,9 @@ func (m *MultiFetchResponse) Size() (n int) {
 }
 
 func (m *GlobMatch) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Path != nil {
@@ -942,6 +951,9 @@ func (m *GlobMatch) Size() (n int) {
 }
 
 func (m *GlobResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Name != nil {
@@ -961,6 +973,9 @@ func (m *GlobResponse) Size() (n int) {
 }
 
 func (m *Retention) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.SecondsPerPoint != nil {
@@ -976,6 +991,9 @@ func (m *Retention) Size() (n int) {
 }
 
 func (m *InfoResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Name != nil {
@@ -1005,6 +1023,9 @@ func (m *InfoResponse) Size() (n int) {
 }
 
 func (m *ServerInfoResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if m.Server != nil {
@@ -1022,6 +1043,9 @@ func (m *ServerInfoResponse) Size() (n int) {
 }
 
 func (m *ZipperInfoResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
 	var l int
 	_ = l
 	if len(m.Responses) > 0 {
@@ -1206,8 +1230,10 @@ func (m *FetchResponse) Unmarshal(dAtA []byte) error {
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
 				}
-				if len(m.Values) == 0 {
-					m.Values = make([]float64, 0, packedLen/8)
+				var elementCount int
+				elementCount = packedLen / 8
+				if elementCount != 0 && len(m.Values) == 0 {
+					m.Values = make([]float64, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v uint64
@@ -1262,6 +1288,11 @@ func (m *FetchResponse) Unmarshal(dAtA []byte) error {
 				postIndex := iNdEx + packedLen
 				if postIndex > l {
 					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				elementCount = packedLen
+				if elementCount != 0 && len(m.IsAbsent) == 0 {
+					m.IsAbsent = make([]bool, 0, elementCount)
 				}
 				for iNdEx < postIndex {
 					var v int
