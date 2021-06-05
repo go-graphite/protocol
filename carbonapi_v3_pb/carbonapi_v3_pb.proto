@@ -1,8 +1,7 @@
 syntax = "proto3";
 package carbonapi_v3_pb;
 
-// Regenerate with protoc --gogofast_out=plugins=grpc:. carbonapi_v3_grpc.proto --proto_path=../vendor/ --proto_path=.
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+option go_package = "github.com/go-graphite/protocol/carbonapi_v3_pb";
 
 message FilteringFunction {
     string name = 1;
@@ -39,7 +38,7 @@ message FetchRequest {
 }
 
 message MultiFetchRequest {
-    repeated FetchRequest metrics = 1 [(gogoproto.nullable) = false];
+    repeated FetchRequest metrics = 1;
 }
 
 // Stop time can be computed by stepTime*len(values)
@@ -60,7 +59,7 @@ message FetchResponse {
 }
 
 message MultiFetchResponse {
-    repeated FetchResponse metrics = 1 [(gogoproto.nullable) = false];
+    repeated FetchResponse metrics = 1;
 }
 
 // Find Metrics
@@ -78,11 +77,11 @@ message GlobMatch {
 // request name to metrics
 message GlobResponse {
     string name = 1;
-    repeated GlobMatch matches = 2 [(gogoproto.nullable) = false];
+    repeated GlobMatch matches = 2;
 }
 
 message MultiGlobResponse {
-    repeated GlobResponse metrics = 1 [(gogoproto.nullable) = false];
+    repeated GlobResponse metrics = 1;
 }
 
 // Information about metrics
@@ -104,16 +103,16 @@ message MetricsInfoResponse {
     string consolidationFunc = 2;
     float xFilesFactor = 4;
     int64 maxRetention = 3;
-    repeated Retention retentions = 5 [(gogoproto.nullable) = false];
+    repeated Retention retentions = 5;
 }
 
 message MultiMetricsInfoResponse {
-    repeated MetricsInfoResponse metrics = 1 [(gogoproto.nullable) = false];
+    repeated MetricsInfoResponse metrics = 1;
 }
 
 // key = server, value = metric
 message ZipperInfoResponse {
-    map<string, MultiMetricsInfoResponse> info = 1 [(gogoproto.nullable) = false];
+    map<string, MultiMetricsInfoResponse> info = 1;
 }
 
 // List all metrics
