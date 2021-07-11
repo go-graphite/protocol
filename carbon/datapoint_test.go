@@ -3,98 +3,91 @@ package carbon
 import "testing"
 
 func Test_NewDatapoint(t *testing.T) {
-	const (
-		testName             = "name"
-		testPrefixParentNode = "parent"
-		testPrefixChildNode  = "child"
-		testFirstTagName     = "firstTag"
-		testFirstTagValue    = "firstTagValue"
-		testSecondTagName    = "secondTag"
-		testSecondTagValue   = "secondTagValue"
-		testValue            = 3.14159265359
-		testTimestamp        = 1552503600
-	)
+	testCases := []struct {
+		actual   string
+		expected string
+	}{
+		{
+			actual:   NewDatapoint("metric1", 3.14159265359, 1552503600).String(),
+			expected: "metric1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithPrefix("foo").
+				String(),
+			expected: "foo.metric1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithPrefix("foo").
+				WithPrefix("bar").
+				String(),
+			expected: "bar.foo.metric1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithPrefix("foo").
+				WithPrefix("bar").
+				WithTag("cpu", "cpu1").
+				String(),
+			expected: "bar.foo.metric1;cpu=cpu1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithTag("cpu", "cpu1").
+				WithPrefix("foo").
+				WithPrefix("bar").
+				String(),
+			expected: "bar.foo.metric1;cpu=cpu1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithPrefix("foo").
+				WithPrefix("bar").
+				WithTag("cpu", "cpu1").
+				WithTag("dc", "dc1").
+				String(),
+			expected: "bar.foo.metric1;cpu=cpu1;dc=dc1 3.14159265359 1552503600\n",
+		},
+		{
+			actual: NewDatapoint("metric1", 3.14159265359, 1552503600).
+				WithTag("cpu", "cpu1").
+				WithTag("dc", "dc1").
+				WithPrefix("foo").
+				WithPrefix("bar").
+				String(),
+			expected: "bar.foo.metric1;cpu=cpu1;dc=dc1 3.14159265359 1552503600\n",
+		},
+	}
 
-	t.Run("simple", func(t *testing.T) {
-		var (
-			actual   = NewDatapoint(testName, testValue, testTimestamp).Plaintext()
-			expected = "name 3.14159265359 1552503600\n"
-		)
-		if actual != expected {
-			t.Fatalf("expected: %s\nactual: %s", expected, actual)
+	for _, testCase := range testCases {
+		if testCase.actual != testCase.expected {
+			t.Fatalf("expected: %s\nactual: %s", testCase.expected, testCase.actual)
 		}
-	})
+	}
+}
 
-	t.Run("with prefix", func(t *testing.T) {
-		var (
-			actual = NewDatapoint(testName, testValue, testTimestamp).
-				WithPrefix(testPrefixParentNode).
-				Plaintext()
-			expected = "parent.name 3.14159265359 1552503600\n"
-		)
-		if actual != expected {
-			t.Fatalf("expected: %s\nactual: %s", expected, actual)
-		}
-	})
+func BenchmarkDatapoint_String(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NewDatapoint("metric1", 3.14159265359, 1552503600).
+			WithPrefix("foo").
+			WithPrefix("bar").
+			WithTag("cpu", "cpu1").
+			WithTag("dc", "dc1").
+			WithTag("env", "stage").
+			WithTag("service", "exporter").
+			WithTag("version", "v0.0.1").
+			WithTag("git-commit", "0b1a09c").
+			String()
+	}
+}
 
-	t.Run("with nested prefix", func(t *testing.T) {
-		var (
-			actual = NewDatapoint(testName, testValue, testTimestamp).
-				WithPrefix(testPrefixChildNode).
-				WithPrefix(testPrefixParentNode).
-				Plaintext()
-			expected = "parent.child.name 3.14159265359 1552503600\n"
-		)
-		if actual != expected {
-			t.Fatalf("expected: %s\nactual: %s", expected, actual)
-		}
-	})
-
-	t.Run("with nested prefix and tag", func(t *testing.T) {
-		var (
-			recordForms = []string{
-				NewDatapoint(testName, testValue, testTimestamp).
-					WithPrefix(testPrefixChildNode).
-					WithPrefix(testPrefixParentNode).
-					WithTag(testFirstTagName, testFirstTagValue).
-					Plaintext(),
-				NewDatapoint(testName, testValue, testTimestamp).
-					WithTag(testFirstTagName, testFirstTagValue).
-					WithPrefix(testPrefixChildNode).
-					WithPrefix(testPrefixParentNode).
-					Plaintext(),
-			}
-			expected = "parent.child.name;firstTag=firstTagValue 3.14159265359 1552503600\n"
-		)
-		for _, actual := range recordForms {
-			if actual != expected {
-				t.Fatalf("expected: %s\nactual: %s", expected, actual)
-			}
-		}
-	})
-
-	t.Run("with nested prefix and tags", func(t *testing.T) {
-		var (
-			recordForms = []string{
-				NewDatapoint(testName, testValue, testTimestamp).
-					WithPrefix(testPrefixChildNode).
-					WithPrefix(testPrefixParentNode).
-					WithTag(testFirstTagName, testFirstTagValue).
-					WithTag(testSecondTagName, testSecondTagValue).
-					Plaintext(),
-				NewDatapoint(testName, testValue, testTimestamp).
-					WithTag(testFirstTagName, testFirstTagValue).
-					WithTag(testSecondTagName, testSecondTagValue).
-					WithPrefix(testPrefixChildNode).
-					WithPrefix(testPrefixParentNode).
-					Plaintext(),
-			}
-			expected = "parent.child.name;firstTag=firstTagValue;secondTag=secondTagValue 3.14159265359 1552503600\n"
-		)
-		for _, actual := range recordForms {
-			if actual != expected {
-				t.Fatalf("expected: %s\nactual: %s", expected, actual)
-			}
-		}
-	})
+func BenchmarkDatapoint_StringByName(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		NewDatapoint(
+			"bar.foo.metric1;cpu=cpu1;dc=dc1;env=stage;service=exporter;version=v0.0.1;git-commit=0b1a09c",
+			3.14159265359,
+			1552503600).
+			String()
+	}
 }

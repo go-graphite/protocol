@@ -1,6 +1,9 @@
 package carbon
 
-import "strconv"
+import (
+	"bytes"
+	"strconv"
+)
 
 const (
 	nextPart      = " "
@@ -12,21 +15,23 @@ const (
 
 // Datapoint is a value stored at a timestamp bucket.
 // If no value is recorded at a particular timestamp bucket in a series,
-// the value will be None (null).
+// the value will be None (null)
 // Doc: https://graphite.readthedocs.io/en/latest/terminology.html
 type Datapoint struct {
-	path      string
+	path      *bytes.Buffer
 	value     float64
 	timestamp int64
 }
 
 // NewDatapoint is a datapoint building function
 func NewDatapoint(name string, value float64, timestamp int64) *Datapoint {
-	return &Datapoint{
-		path:      name,
+	datapoint := &Datapoint{
+		path:      &bytes.Buffer{},
 		value:     value,
 		timestamp: timestamp,
 	}
+	datapoint.path.WriteString(name)
+	return datapoint
 }
 
 // WithPrefix adds provided prefix to datapoint
@@ -34,7 +39,11 @@ func NewDatapoint(name string, value float64, timestamp int64) *Datapoint {
 // For example WithPrefix("second").WithPrefix("first") is
 // equal to WithPrefix("first.second")
 func (d *Datapoint) WithPrefix(prefix string) *Datapoint {
-	d.path = prefix + nextNode + d.path
+	path := d.path.String()
+	d.path.Reset()
+	d.path.WriteString(prefix)
+	d.path.WriteString(nextNode)
+	d.path.WriteString(path)
 	return d
 }
 
@@ -43,15 +52,23 @@ func (d *Datapoint) WithPrefix(prefix string) *Datapoint {
 // For example WithTag("tag1","tag1Value").WithTag("tag2","tag2Value") adds ";tag1=tag1Value;tag2=tag2Value"
 // While WithTag("tag2","tag2Value").WithTag("tag1","tag1Value") adds ";tag2=tag2Value;tag1=tag1Value"
 func (d *Datapoint) WithTag(name, value string) *Datapoint {
-	d.path += nextTag + name + nextTagValue + value
+	d.path.WriteString(nextTag)
+	d.path.WriteString(name)
+	d.path.WriteString(nextTagValue)
+	d.path.WriteString(value)
 	return d
 }
 
-// Plaintext returns Graphite Plaintext record form of datapoint
-func (d *Datapoint) Plaintext() string {
+// String returns Graphite Plaintext record form of datapoint
+func (d *Datapoint) String() string {
 	var (
 		value     = strconv.FormatFloat(d.value, 'f', -1, 64)
 		timestamp = strconv.FormatInt(d.timestamp, 10)
 	)
-	return d.path + nextPart + value + nextPart + timestamp + nextDatapoint
+	d.path.WriteString(nextPart)
+	d.path.WriteString(value)
+	d.path.WriteString(nextPart)
+	d.path.WriteString(timestamp)
+	d.path.WriteString(nextDatapoint)
+	return d.path.String()
 }
