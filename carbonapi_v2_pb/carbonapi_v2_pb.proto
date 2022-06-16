@@ -3,6 +3,16 @@ package carbonapi_v2_pb;
 
 option go_package = "github.com/go-graphite/protocol/carbonapi_v2_pb";
 
+message FetchRequest {
+    string name = 1;
+    int32 startTime = 2;
+    int32 stopTime = 3;
+}
+
+message MultiFetchRequest {
+  repeated FetchRequest metrics = 1;
+}
+
 message FetchResponse {
     string name = 1;
     int32 startTime = 2;
