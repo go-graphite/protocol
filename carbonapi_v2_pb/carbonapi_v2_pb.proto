@@ -26,6 +26,10 @@ message MultiFetchResponse {
     repeated FetchResponse metrics = 1;
 }
 
+message GlobRequest {
+    string query = 1;
+}
+
 message GlobMatch {
     string path = 1;
     bool isLeaf = 2;
@@ -34,6 +38,10 @@ message GlobMatch {
 message GlobResponse {
     string name = 1;
     repeated GlobMatch matches = 2;
+}
+
+message InfoRequest {
+	string name = 1;
 }
 
 message Retention {
