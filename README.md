@@ -19,7 +19,7 @@ We use [planetscale/vtprotobuf](https://github.com/planetscale/vtprotobuf) gener
 
 To install required generators please use:
 ```
-$ go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto
+$ go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto@v0.6.0
 ```
 
 Then generate Go files with:
