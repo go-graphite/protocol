@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/planetscale/vtprotobuf v0.6.0
 	google.golang.org/grpc v1.65.0
-	google.golang.org/protobuf v1.34.2
+	google.golang.org/protobuf v1.35.2
 )
 
 require (
